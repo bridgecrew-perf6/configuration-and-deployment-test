@@ -17,6 +17,20 @@ jobs:
       - run:
           name: "Say hello"
           command: "echo Hello, World!"
+  
+  configure-infrastructure:
+    docker:
+      - image: python:3.7-alpine3.11
+    steps:
+      - checkout
+      - add_ssh_keys:
+        fingerprints: ["3c:f0:fe:3c:84:53:b5:52:ea:32:f7:da:65:d3:dc:28"]
+      - run: 
+        name: "Install ansible"
+        command: apk add --update ansible
+      - run:
+        name: "Run playbook"
+        command: ansible-playbook -i inventory main.yml
 
 
 
@@ -26,3 +40,4 @@ workflows:
   say-hello-workflow:
     jobs:
       - say-hello
+      - configure-infrastructure
